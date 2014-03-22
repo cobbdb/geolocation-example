@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script>
+        $(function () {
+            var log = function (msg) {
+                msg = msg || '';
+                $('#log').append(msg + '\n');
+            };
+            var status = function (msg) {
+                $('#status').text(msg);
+            };
+            try {
+                navigator.geolocation.getCurrentPosition(
+                    function (pos) {
+                        status('Found');
+                        log('lat: ' + pos.coords.latitude);
+                        log('lng: ' + pos.coords.longitude);
+                        log('acc: ' + pos.coords.accuracy);
+                    },
+                    function (err) {
+                        status('Error');
+                        log('Failed with error code: ' + err.code);
+                        log(err.message);
+                    },
+                    {
+                        maximumAge: 60000,
+                        timeout: 1500
+                    }
+                );
+            } catch (err) {
+                status('Error');
+                log('HTML5 navigator is not supported in this browser!');
+            }
+        });
+    </script>
+</head>
+<body>
+    <h4 id="status">Locating...</h4>
+    <pre id="log"></pre>
+</body>
+</html>
